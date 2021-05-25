@@ -21,8 +21,6 @@ function BlackbodyPage(props) {
         logoInverted="https://uploads.divjoy.com/logo-white.svg"
       />
 
-      
-
       <Footer
         bgColor="default"
         size="medium"
