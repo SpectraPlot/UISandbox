@@ -97,20 +97,26 @@ function Navbar(props) {
                 <MenuIcon />
               </IconButton>
             </Hidden>
+
+
             <Hidden smDown={true} implementation="css">
-              <Button color="inherit" component={Link} to="/blackbody">
+              <Button color="inherit" component={Link} to="/blackbody" 
+              variant={props.page==="blackbody" && "outlined"}>
                 Blackbody
               </Button>
 
-              <Button color="inherit" component={Link} to="/absorption">
+              <Button color="inherit" component={Link} to="/absorption"
+              variant={props.page==="absorption" && "outlined"}>
                 Absorption
               </Button>
 
-              <Button color="inherit" component={Link} to="/emission">
+              <Button color="inherit" component={Link} to="/emission"
+              variant={props.page==="emission" && "outlined"}>
                 Emission
               </Button>
 
-              <Button color="inherit" component={Link} to="/survey">
+              <Button color="inherit" component={Link} to="/survey"
+              variant={props.page==="survey" && "outlined"}>
                 Survey
               </Button>
 

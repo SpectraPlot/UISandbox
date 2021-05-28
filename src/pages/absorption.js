@@ -1,6 +1,8 @@
 import React from "react";
 import Navbar from "./../components/Navbar";
+import AbsorptionForm from "./../components/AbsorptionForm";
 import Footer from "./../components/Footer";
+
 
 function AbsorptionPage(props) {
   return (
@@ -9,12 +11,17 @@ function AbsorptionPage(props) {
     
 
       <Navbar
-        color="default"
+        color="primary"
+        logo="https://uploads.divjoy.com/logo.svg"
+        logoInverted="https://uploads.divjoy.com/logo-white.svg"
+        page="absorption"
+      />
+
+      <AbsorptionForm
+        color="primary"
         logo="https://uploads.divjoy.com/logo.svg"
         logoInverted="https://uploads.divjoy.com/logo-white.svg"
       />
-
-      Absorption
       
 
       <Footer

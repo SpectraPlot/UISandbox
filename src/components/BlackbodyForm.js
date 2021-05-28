@@ -4,7 +4,8 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import { VictoryLine  , VictoryChart, VictoryAxis } from 'victory';
+import Switch from '@material-ui/core/Switch';
+import { VictoryLine , VictoryChart, VictoryAxis, VictoryCursorContainer, VictoryVoronoiContainer, VictoryTheme} from 'victory';
 
 
 
@@ -22,10 +23,10 @@ let fetchedData = [];
   {quarter: 4, earnings: 19000}
 ];*/}
 
-const [Temp, setTemp] = useState('300');
-const [NuStart, setNuStart] = useState('5000');
-const [NuEnd, setNuEnd] = useState('20000');
-const [Emissivity, setEmissivity] = useState('1000000000000');
+const [Temp, setTemp] = useState('900');
+const [NuStart, setNuStart] = useState('.5');
+const [NuEnd, setNuEnd] = useState('12');
+const [Emissivity, setEmissivity] = useState('1');
 const [lineData, setLine] = useState(dataHold)
 
 
@@ -37,8 +38,8 @@ const [lineData, setLine] = useState(dataHold)
       const response = await fetch(url);
       const fetchedData = await response.json();
         
-      await setLine(fetchedData);
-
+      await setLine(lineData.concat(fetchedData));
+      console.log(fetchedData);
 
 
       {/*
@@ -48,11 +49,18 @@ const [lineData, setLine] = useState(dataHold)
     }
 
   return(
+    <React.Fragment>
     <Container maxWidth="md">
+    <div style={{ padding: 10 }}/>
     
-    <Grid container={true} direction="row" spacing={1}>
-      <Grid container={true} direction="column" md={4} spacing={1}>
-          <Grid item={true} xs={3} md={6} >
+    <Grid container alignItems="stretch" spacing={2}>
+    <Grid item xs={6}>
+      <Grid container={true} direction="row" spacing={2}>
+          <Grid item={true} xs={12} >
+            <h2>Simulation Parameters</h2>
+          </Grid>
+
+          <Grid item={true} xs={4} >
               <TextField
                 variant="outlined"
                 size="small"
@@ -65,7 +73,8 @@ const [lineData, setLine] = useState(dataHold)
                 fullWidth={true}
               />
           </Grid>
-          <Grid item={true} xs={3} md={6}>
+
+          <Grid item={true} xs={4}>
               <TextField
                 variant="outlined"
                 type="text"
@@ -78,10 +87,19 @@ const [lineData, setLine] = useState(dataHold)
                 fullWidth={true}
               />
           </Grid>
-        </Grid>
+          <Grid item={true} xs={4}>
+          <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              type="submit"
+              onClick={submitBlackBody}
+            >
+            Simulate
+            </Button >
+          </Grid>
 
-        <Grid container={true} direction="column" md={4} spacing={1}>
-          <Grid item={true} xs={3} md={6} >
+          <Grid item={true} xs={4} >
               <TextField
                 variant="outlined"
                 size="small"
@@ -95,7 +113,7 @@ const [lineData, setLine] = useState(dataHold)
               />
           </Grid>
 
-          <Grid item={true} xs={3} md={6}>
+          <Grid item={true} xs={4}>
               <TextField
                 variant="outlined"
                 type="text"
@@ -108,70 +126,86 @@ const [lineData, setLine] = useState(dataHold)
                 fullWidth={true}
               />
           </Grid>
-        </Grid>
-        <Grid container={true} direction="column" md={4} spacing={1}>
-        <Grid item={true} xs={3} md={6}>
-        <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              type="submit"
-              onClick={submitBlackBody}
-            >
-            Simulate
-            </Button >
-            </Grid>
-            </Grid>
-        {/*}
-        <Grid container={true} direction="column" md={4} spacing={1}>
-          <Grid item={true} xs={3} md={6}>
-              <TextField
-                variant="outlined"
-                size="small"
-                type="text"
-                label="lambda start"
-                name="name"
-                helperText=""
-                fullWidth={true}
+          <Grid item={true} xs={4}>
+                    um
+              <Switch
+                
               />
+              cm^-1
           </Grid>
-
-          <Grid item={true} xs={3} md={6}>
-              <TextField
-                variant="outlined"
-                type="text"
-                size="small"
-                label="lambda end"
-                name="name"
-                helperText=""
-                fullWidth={true}
-              />
-          </Grid>
-        </Grid>
-        */}
+          
       </Grid>
-      
-      <VictoryChart  domainPadding={20}>
-          <VictoryAxis
-              // tickValues specifies both the number of ticks and where
-              // they are placed on the axis
-              //tickValues={[5000, 10000, 15000, 20000]}
-              
+    </Grid>
+        </Grid>
+
+    </Container>
+
+    <Container maxWidth="md">
+    
+    <Grid container={true} direction="row" xs={12} spacing={1}>
+      <VictoryChart 
+      padding={{ top: 10, bottom: 10, left: 50, right: 50 }}
+      height={150}
+      domain={{ x: [NuStart, NuEnd] }}
+      domainPadding={{x: [0, 1],y: [0, 20]}}
+      theme={VictoryTheme.material}
+      containerComponent={
+    <VictoryVoronoiContainer
+      voronoiDimension="x"
+      labels={({ datum }) => `y: ${datum.emission.toFixed(2)}`}
+    />
+    }
+
+      /*}  
+    <VictoryCursorContainer
+      cursorDimension="x"
+      cursorLabel={({ datum }) => `/nu=${datum.x.toFixed(2)}, y=${datum.y.toFixed(2)}`}
+    /> */
+  
+  >
+
+                <VictoryLine 
+                data={lineData} 
+                  x="nu"      // data accessor for x values
+                  y="emission"// data accessor for y values
+                  />
+                   <VictoryAxis
+                           
+                    name="wavelengthAxis"
+                    label="wavelength, um"
+                    
             />
+
+            <VictoryAxis
+                orientation="top"
+                label=""
+                name="wavenumberAxis"
+                tickFormat={() => ''}  
+
+                //tickValues={[5000, 10000, 15000, 20000]}
+            />
+
             <VictoryAxis
               dependentAxis
+              label="W/(steradian nm m^2)"
+              style={{ axisLabel: {padding: 30} }}
               // tickFormat specifies how ticks should be displayed
               
             />
-                <VictoryLine 
-                data={lineData} 
-                                  // data accessor for x values
-                  x="nu"
-                  y="emission"// data accessor for y values
-                  />
+
+            <VictoryAxis
+            dependentAxis
+            orientation="right"
+            label=""
+            tickFormat={() => ''}            
+            />
+
         </VictoryChart>
+        </Grid>
+        
 
     </Container>
+    </React.Fragment>
     );
 }
 

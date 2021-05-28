@@ -9,9 +9,10 @@ function LinesurveyPage(props) {
     
 
       <Navbar
-        color="default"
+        color="primary"
         logo="https://uploads.divjoy.com/logo.svg"
         logoInverted="https://uploads.divjoy.com/logo-white.svg"
+        page="survey"
       />
 
       linesurvey
